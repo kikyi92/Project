@@ -6,7 +6,8 @@
 </head>
 <body>
 <h1>
-	Hello world! home.jsp!   
+	Hello world!
+	깃허브 계정추가 테스트!   
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
