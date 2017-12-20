@@ -6,7 +6,7 @@
 <head>
 	<title>Home</title>
 </head>
-<body>
+<body> 
 <h1>
 	Xiness
 </h1>

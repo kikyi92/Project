@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-	<!-- view 지원을 제외한 bean 설정(service, repository(dao), db connection, log등 등을 정의한다. ) -->
-	
-</beans:beans>
+<beans xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd" xmlns:beans="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans">
+<!-- Root Context: defines shared resources visible to all other web components -->
+<!-- DB properties -->
+<!-- <util:properties location="classpath:/jdbc.properties" id="jdbc"/> -->
+
+<!-- MyBatis -->
+<!-- dataSource -->
+<bean id="dataSource" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
+	<beans:property value="com.mysql.jdbc.Driver" name="driverClassName"/>
+	<beans:property value="jdbc:mysql://127.0.0.1:3306/project" name="url"/>
+	<beans:property value="root" name="username"/>
+	<beans:property value="1234" name="password"/>
+</bean>
+
+<!-- SqlSessionFactoryBean 생성  -->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"></property>
+    <property name="mapperLocations" value="classpath:mappers/**/*.xml"></property>
+</bean>
+
+<!-- SqlSessionTemplate -->
+<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+	<constructor-arg ref="sqlSessionFactory"/>
+</bean>
+
+<!-- 트랜잭션 -->
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="dataSource"/>
+</bean>
+
+<!-- Mapper -->
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<property value="com.mycompany.dao" name="basePackage" />
+</bean>
+
+</beans>
